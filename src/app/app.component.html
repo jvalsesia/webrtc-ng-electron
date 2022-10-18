@@ -1,0 +1,279 @@
+<p>
+  <mat-toolbar>
+    <button mat-button disabled>
+      <img src="assets/WebRTC_Logo.png">
+    </button>
+  
+
+    <button mat-button disabled position="end">
+      <img src="assets/avaya-logo-vertical-white.png">
+    </button>
+
+    <span>{{ title }}</span>
+  </mat-toolbar>
+</p>
+
+<mat-sidenav-container >
+  <mat-sidenav #sidenav position="end" [opened]="isSidenavShowing">
+    <h1>Settings</h1>
+
+    <form [formGroup]="clientConfigForm" (submit)="configSubmit()">
+
+      <mat-tab-group dynamicHeight>
+        <mat-tab label="Client Config">
+          <mat-card>
+            <mat-card-title>Client Config</mat-card-title>
+            <mat-card-content>
+              <mat-form-field appearance="outline" >
+                <mat-label>Display Name</mat-label>
+                <input matInput placeholder="Display Name" formControlName="displayNameInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>From Address</mat-label>
+                <input matInput placeholder="From Address" formControlName="fromAddressInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Destination Address</mat-label>
+                <input matInput placeholder="Destination Address" formControlName="destinationAddressInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Context</mat-label>
+                <input matInput placeholder="Context" formControlName="contextInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Topic</mat-label>
+                <input matInput placeholder="Topic" formControlName="topicInput">
+              </mat-form-field>
+            </mat-card-content>
+
+          </mat-card>
+        </mat-tab>
+
+        <mat-tab label="Service">
+          <mat-card>
+            <mat-card-title>Service</mat-card-title>
+            <mat-card-content>
+              <mat-form-field appearance="outline">
+                <mat-label>Priority</mat-label>
+                <input matInput placeholder="Priority" formControlName="priorityInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Locale</mat-label>
+                <input matInput placeholder="Locale" formControlName="localeInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Strategy</mat-label>
+                <mat-select [(value)]="selectedStrategy" formControlName="strategyInput">
+                  <mat-option *ngFor="let item of strategies" [value]="item.strategy">
+                    {{item.strategy}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+
+        <mat-tab label="Resource">
+          <mat-card>
+            <mat-card-title>Resource</mat-card-title>
+            <mat-card-content>
+              <mat-form-field appearance="outline">
+                <mat-label>Source Name</mat-label>
+                <input matInput placeholder="Source Name" formControlName="sourceNameInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Resource Id</mat-label>
+                <input matInput placeholder="Resource Id" formControlName="resourceIdInput">
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+
+        <mat-tab label="AAWG Config">
+          <mat-card>
+            <mat-card-title>AAWG Config</mat-card-title>
+            <mat-card-content>
+              <mat-form-field appearance="outline">
+                <mat-label>AAWG Server Address</mat-label>
+                <input matInput placeholder="AAWG Server Address" formControlName="aAWGServerAddressInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>AAWG Server Port</mat-label>
+                <input matInput placeholder="AAWG Server Port" formControlName="aAWGServerPortInput">
+              </mat-form-field>
+              <div>
+                <mat-checkbox formControlName="useHTTPSInput">Use HTTPS</mat-checkbox>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+
+
+        <mat-tab label="Token Config">
+          <mat-card>
+            <mat-card-title>Token Config</mat-card-title>
+            <mat-card-content>
+              <mat-form-field appearance="outline">
+                <mat-label>Token Server Address</mat-label>
+                <input matInput placeholder="Token Server Address" formControlName="tokenServerAddressInput">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Token Server Port</mat-label>
+                <input matInput placeholder="Token Server Port" formControlName="tokenServerPortInput">
+              </mat-form-field>
+              <div>
+                <mat-checkbox formControlName="tokenUseHTTPSInput">Use HTTPS</mat-checkbox>
+              </div>
+              <mat-form-field appearance="outline">
+                <mat-label>Token Service URL Path</mat-label>
+                <input matInput placeholder="Token Service URL Path" formControlName="tokenServiceURLPathInput">
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+      </mat-tab-group>
+      <button mat-raised-button color="primary" type="submit">Save Config</button>
+
+    </form>
+  </mat-sidenav>
+
+
+  <mat-sidenav-content class="container">
+
+    
+    <mat-card class="mat-card-status">
+      <mat-card-title>Status</mat-card-title>
+      <mat-card-content>
+        <div>
+          Voice Call Quality: {{ uiVoiceCallQuality }}
+        </div>
+        <div>
+          Client State: {{ uiClientState }}
+        </div>
+        <div>
+          Voice Interaction State: {{ voiceInteractionEventStateChange }}
+        </div>
+        <div>
+          Voice Interaction Duration: {{ voiceInteractionEventDuration }}
+        </div>
+        <div>
+          Mute: {{ mute }}
+        </div>
+        <div>
+          Hold: {{ hold }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+
+
+
+    <mat-card>
+      <mat-card-title>Controllers</mat-card-title>
+      <mat-card-content>
+        <div class="example-button-row">
+          <button mat-raised-button color="primary" (click)="startCall()" [disabled]="active">Start Call</button>
+          <button mat-raised-button color="accent" (click)="endCall()" [disabled]="!active">End Call</button>
+        </div>
+
+        <div>
+          <mat-slide-toggle [color]="color" [checked]="mute" (change)="volumeMute()">
+            Mute
+          </mat-slide-toggle>
+        </div>
+        <div>
+          <mat-slide-toggle [color]="color" [checked]="hold" (change)="holdCall()">
+            Hold
+          </mat-slide-toggle>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+
+    <mat-card class="mat-card-dtmf"> 
+      <mat-card-title>DTMF</mat-card-title>
+      <mat-card-content>
+        <div>
+
+          <mat-grid-list cols="3" >
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('1')">
+                1
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('2')">
+                2
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('3')">
+                3
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('4')">
+                4
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('5')"> 
+                5
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('6')">
+                6
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('7')">
+                7
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('8')">
+                8
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('9')">
+                9
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('10')">
+                *
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary" (click)="dtmf('0')">
+                0
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button mat-mini-fab color="primary"(click)="dtmf('11')">
+                #
+              </button>
+            </mat-grid-tile>
+          </mat-grid-list>
+
+      </div>
+      </mat-card-content>
+    </mat-card>
+
+
+
+
+    <mat-card>
+      <mat-card-title>Settings</mat-card-title>
+      <mat-card-content>
+        <div class="icon-align-end">
+          <mat-icon (click)="showSidenav()">settings</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

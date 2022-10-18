@@ -1,0 +1,63 @@
+mat-toolbar {
+    height: 100%;
+    background-color: #E6E6E6;
+  }
+  
+  mat-sidenav-container {
+    height: 100%;
+  }
+  mat-sidenav, mat-sidenav-content {
+    padding: 16px;
+  }
+  mat-sidenav {
+    height: 100%;
+    background-color:lightgray;
+    width: 400px;
+  }
+  
+  mat-sidenav-content {
+    height: 100%;
+    background-image: linear-gradient(to right, #004E6C , #45AF9A, #004E6C);
+  }
+  
+  mat-card {
+    margin: 5px;
+    padding: 5px;
+    background-color: #FFFFFF;
+  }
+  mat-card-content {
+    font-size: 12px;
+  }
+  
+    .container h1, .container h2 {
+      text-align: center;
+    }
+    
+    .container {
+      height: 95%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .icon-align-end {
+      text-align: end;
+    }
+  
+    .mat-card-status {
+      width: 300px;
+    }
+
+    .mat-card-dtmf {
+      width: 150px;
+      height: 250px;
+    }
+  
+    .example-button-row {
+      display: table-cell;
+      width: 200px;
+    }
+    
+    .example-button-row .mat-button-base {
+      margin: 8px 8px 8px 0;
+    }
